@@ -1,43 +1,31 @@
 import React, { useState } from "react";
 import "./App.css";
-
+import Items from "./components/todoitem";
+import Inputfile from "./components/input";
 function App() {
   const [list, setList] = useState([]);
-  const [inputValue, setInputValue] = useState("");
 
-  function addList(event) {
-    event.preventDefault();
-
+  function addList(inputValue) {
     setList([...list, inputValue]);
-    setInputValue("");
   }
 
-  function handleChange(event) {
-    setInputValue(event.target.value);
+  function deleteItem(id) {
+    setList((prevList) => {
+      return prevList.filter((item, index) => index !== id);
+    });
   }
 
   return (
     <div className="App">
-    
-          <form onSubmit={addList}>
-            <h1 className="head">To-Do List</h1>
-            <div className="inputSave">
-              <input
-                name="todolist"
-                autoComplete="off"
-                required
-                value={inputValue}
-                onChange={handleChange}
-              />
-              <button type="submit">Add</button>
-            </div>
-            <ul className="items">
-              {list.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-          </form>
-
+      <div className="form">
+        <h1 className="head">To-Do List</h1>
+        <Inputfile onAdd={addList} />
+        <ul className="items">
+          {list.map((item, index) => (
+            <Items key={index} id={index} item={item} onChecked={deleteItem} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
